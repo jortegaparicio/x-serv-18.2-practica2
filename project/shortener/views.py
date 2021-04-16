@@ -10,7 +10,6 @@ from django.template import loader
 
 @csrf_exempt
 def get_content(request, surl):
-    print("*******************************************************************+")
     if request.method == "POST":
         try:
             # We are getting the data from HTTP body and we are saving it in the data base
@@ -28,7 +27,6 @@ def get_content(request, surl):
             # if the short url doesn't exist in our data base it will raise an exception
             content = Content.objects.get(shortUrl=surl)
             template = loader.get_template('shortener/redirection.html')
-            print(content.url)
             c = {"content": content.url}
             answer = template.render(c)
         else:  # if the resource is /
