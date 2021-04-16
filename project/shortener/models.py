@@ -4,5 +4,5 @@ from django.db import models
 
 
 class Content(models.Model):
-    shorturl = models.TextField()
+    shortUrl = models.TextField()
     url = models.TextField()

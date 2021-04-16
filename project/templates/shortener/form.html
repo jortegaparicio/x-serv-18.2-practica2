@@ -1,0 +1,23 @@
+<html>
+<head>
+    <title>Shorten URL's App</title>
+</head>
+<body>
+    <h2>Shorten URL's App</h2>
+        <form action="" method="POST">{% csrf_token %}
+        <p>Insert URL: <input type="text" name="url"></p>
+        <p>Insert Short URL: <input type="text" name="short"></p>
+        <p><input type="submit" value="Send"></p>
+    </form>
+    <p>URL's List: </p>
+    {% if contentList %}
+    <ul>
+        {% for content in contentList %}
+        <li>{{ content.shortUrl }} ---> {{ content.url }}</li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <p>We don't have content</p>
+    {% endif %}
+</body>
+</html>
