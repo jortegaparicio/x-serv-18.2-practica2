@@ -1,20 +1,11 @@
 from django.shortcuts import render
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse
 from .models import Content
 from django.views.decorators.csrf import csrf_exempt
 from urllib.parse import unquote
+from django.template import loader
 
 # Create your views here.
-
-
-form = """
-    This shortener URL does not exist in the data base.
-    <p> Add a new URL for this shortener URL.
-    <form action="" method="POST">
-        <p>Insert URL: <input type="text" name="form_url"></p>
-        <p><input type="submit" value="Send"></p>
-    </form>
-"""
 
 @csrf_exempt
 def get_content(request, surl):
@@ -29,7 +20,16 @@ def get_content(request, surl):
     # GET method, here we read it if it does exist, if it doesn't exist we give back a form
     try:
         content = Content.objects.get(shorturl=surl)
-        answer = "The URL is " + content.url + "\nThe short URL is " + content.shorturl + "\nThe ID is " + str(content.id)
+        answer = "The URL is " + content.url + "\nThe short URL is " + content.shorturl + "\nThe ID is " + \
+                 str(content.id)
     except Content.DoesNotExist:
-        answer = form
+        template = loader.get_template('shortener/form.html')
+        answer = template.render()
     return HttpResponse(answer)
+
+
+def form_act(request):
+    # We are getting the HTML
+    template = loader.get_template('shortener/form.html')
+    # We renderise this template
+    return HttpResponse(template.render())
