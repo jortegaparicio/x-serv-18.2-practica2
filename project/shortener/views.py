@@ -40,9 +40,27 @@ def get_content(request, surl):
 
 
 def form_act(request):
-    print("\n*********************************************\n")
+
     if request.method == "POST":
-        return HttpResponse("Hola")
+        short_url = unquote(request.POST['short'])
+        long_url = unquote(request.POST['url'])
+        if short_url == "" or long_url == "":  # if there is no QS
+            raise Http404("No QS extracted from your form.")
+        else:
+            # We have to add 'https://' if the url doesn't have it
+            if not long_url.startswith('http://') and not long_url.startswith('https://'):
+                long_url = 'https://' + long_url
+            # if this content exist we will delete from our data base
+            exist = Content.objects.filter(shortUrl=short_url).exists()
+            if exist:
+                borr = Content.objects.get(shortUrl=short_url)
+                borr.delete()
+            c = Content(url=long_url, shortUrl=short_url) # Here we add the new content
+            c.save()
+        template = loader.get_template('shortener/posthtml.html')
+        c = {"content": c}
+        return HttpResponse(template.render(c))
+
     if request.method == "GET":
         contentlist = Content.objects.all()
         # We are getting the HTML
