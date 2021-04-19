@@ -17,6 +17,6 @@ from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
-    path('shortener/', include('shortener.urls')),    
+    path('acorta/', include('acorta.urls')),    
     path('admin/', admin.site.urls),
 ]
